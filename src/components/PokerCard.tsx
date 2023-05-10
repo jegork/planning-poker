@@ -1,12 +1,18 @@
 import { Box, BoxProps, Center, Flex, Text } from '@chakra-ui/react';
 
 export interface PokerCardProps {
-  value: number;
+  value: number | null;
   color: BoxProps['bgColor'];
   border?: BoxProps['border'];
+  textColor?: BoxProps['color'];
 }
 
-export default function PokerCard({ value, color, border = 'initial'}: PokerCardProps) {
+export default function PokerCard({
+  value,
+  color,
+  border = 'initial',
+  textColor = 'white',
+}: PokerCardProps) {
   return (
     <Box
       h="150px"
@@ -14,21 +20,21 @@ export default function PokerCard({ value, color, border = 'initial'}: PokerCard
       border={border}
       bgColor={color}
       shadow="md"
-      color="white"
+      color={textColor}
       px={2}
       py={1}
     >
       <Flex h="full" w="full" flexDir="column">
-        <Text textAlign="left">{value}</Text>
+        <Text textAlign="left">{value || '?'}</Text>
         <Center flexGrow="1">
-          <Text fontSize="48px">{value}</Text>
+          <Text fontSize="48px">{value || '?'}</Text>
         </Center>
         <Text
           textAlign="left"
           transform="rotate(180deg)"
           transformOrigin="center center"
         >
-          {value}
+          {value || '?'}
         </Text>
       </Flex>
     </Box>

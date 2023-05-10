@@ -1,11 +1,16 @@
 import {
   Box,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
   Center,
   Flex,
   Grid,
   GridItem,
   Heading,
   Stack,
+  Text,
   Wrap,
 } from '@chakra-ui/react';
 import PlayersList from '../components/PlayersList';
@@ -30,6 +35,7 @@ interface Props {
   playersList: Array<string>;
   storiesList: StoriesListProps['stories'];
   activeStoryId: StoriesListProps['activeId'];
+  code: string;
 }
 
 export default function PlayPage({
@@ -38,6 +44,7 @@ export default function PlayPage({
   storiesList = [],
   activeStoryId = null,
   isPlaying = false,
+  code = '',
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const handleSelectCard: SelectablePokerCardProps['onClick'] = (v) => {};
   const handleGameReset = () => {};
@@ -52,19 +59,40 @@ export default function PlayPage({
           <Heading>OpenPlanningPoker</Heading>
         </Flex>
       </Box>
-      <Flex flexGrow={1} h="full" flexDir="column" px={4} py={8} maxW="1200px">
+      <Flex flexGrow={1} h="full" flexDir="column" px={4} py={8} maxW="1400px">
         <Box flexGrow="1" w="full">
           <Grid
             h="full"
             w="full"
             gap="4"
             gridTemplateColumns={'1fr auto'}
-            gridTemplateRows={'400px 1fr'}
+            gridTemplateRows={'auto 400px 1fr'}
             templateAreas={`
+            "table info"
             "table players"
             "table stories"
           `}
           >
+            <GridItem area={'info'}>
+              <Card>
+                <CardHeader>
+                  <Heading size="md">Game info</Heading>
+                </CardHeader>
+                <CardBody>
+                  <Flex
+                    flexDir="row"
+                    w="full"
+                    justify="space-between"
+                    align="center"
+                  >
+                    <Text>Code: {code}</Text>
+                    <Button size="sm" colorScheme="purple">
+                      Share
+                    </Button>
+                  </Flex>
+                </CardBody>
+              </Card>
+            </GridItem>
             <GridItem area={'table'}>
               <Stack
                 direction="column"
@@ -81,7 +109,13 @@ export default function PlayPage({
                     onResume={handleGameResume}
                   />
                 </Center>
-                <Wrap spacingY={2} direction="row" spacing={4} w="full" justify="center">
+                <Wrap
+                  spacingY={2}
+                  direction="row"
+                  spacing={4}
+                  w="full"
+                  justify="center"
+                >
                   {FIBONACCI.map((v) => (
                     <SelectablePokerCard
                       key={v}
@@ -128,12 +162,15 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     vote: getRandom(FIBONACCI),
   }));
 
+  playerVotes[playerVotes.length - 1].vote = null;
+
   const props = {
     playerVotes,
     playersList,
-    storiesList: [1, 2, 3, 4, 5].map((v) => ({ name: 'Story ' + v })),
+    storiesList: [1, 2, 3, 4].map((v) => ({ name: 'Story ' + v })),
     activeStoryId: 0,
     isPlaying: true,
+    code: '12312',
   };
 
   return {

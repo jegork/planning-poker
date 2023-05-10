@@ -13,7 +13,7 @@ import {
 import PokerCard, { PokerCardProps } from './PokerCard';
 
 export interface PokerTableProps {
-  playerVotes: Array<{ name: string; vote: number }>;
+  playerVotes: Array<{ name: string; vote: number | null }>;
   isPlaying: boolean;
   onResume: () => void;
   onPause: () => void;
@@ -36,7 +36,12 @@ export default function PokerTable({
         <Stack direction="row" py={6} px={14}>
           {playerVotes.map((v) => (
             <Box key={v.name}>
-              <PokerCard value={v.vote} color={'green'} />
+              <PokerCard
+                value={v.vote}
+                textColor={v.vote ? 'white' : 'black'}
+                color={v.vote ? 'green' : 'transparent'}
+                border="1px solid black"
+              />
               <Text w="full" textAlign="center" mt={2}>
                 {v.name}
               </Text>
