@@ -35,7 +35,7 @@ interface Props {
   playersList: Array<string>;
   storiesList: StoriesListProps['stories'];
   activeStoryId: StoriesListProps['activeId'];
-  code: string;
+  id: string;
 }
 
 export default function PlayPage({
@@ -44,7 +44,7 @@ export default function PlayPage({
   storiesList = [],
   activeStoryId = null,
   isPlaying = false,
-  code = '',
+  id = '',
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const handleSelectCard: SelectablePokerCardProps['onClick'] = (v) => {};
   const handleGameReset = () => {};
@@ -85,7 +85,7 @@ export default function PlayPage({
                     justify="space-between"
                     align="center"
                   >
-                    <Text>Code: {code}</Text>
+                    <Text>Code: {id}</Text>
                     <Button size="sm" colorScheme="purple">
                       Share
                     </Button>
@@ -171,10 +171,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 
   const playerVotes = playersList.map((v) => ({
     name: v,
-    vote: getRandom(FIBONACCI),
+    value: getRandom(FIBONACCI),
   }));
 
-  playerVotes[playerVotes.length - 1].vote = null;
+  playerVotes[playerVotes.length - 1].value = null;
 
   const props = {
     playerVotes,
@@ -182,7 +182,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     storiesList: [1, 2, 3, 4].map((v) => ({ name: 'Story ' + v })),
     activeStoryId: 0,
     isPlaying: true,
-    code: params.id,
+    id: params.id,
   };
 
   return {
