@@ -3,13 +3,15 @@ import { Box, BoxProps, Center, Flex, Text } from '@chakra-ui/react';
 export interface PokerCardProps {
   value: number;
   color: BoxProps['bgColor'];
+  border?: BoxProps['border'];
 }
 
-export default function PokerCard({ value, color }: PokerCardProps) {
+export default function PokerCard({ value, color, border = 'initial'}: PokerCardProps) {
   return (
     <Box
       h="150px"
       w="100px"
+      border={border}
       bgColor={color}
       shadow="md"
       color="white"

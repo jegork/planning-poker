@@ -81,7 +81,7 @@ export default function PlayPage({
                     onResume={handleGameResume}
                   />
                 </Center>
-                <Wrap direction="row" spacing={6} w="full" justify="center">
+                <Wrap spacingY={2} direction="row" spacing={4} w="full" justify="center">
                   {FIBONACCI.map((v) => (
                     <SelectablePokerCard
                       key={v}
