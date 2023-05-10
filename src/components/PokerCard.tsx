@@ -1,4 +1,4 @@
-import { Box, BoxProps, Center, Text } from '@chakra-ui/react';
+import { Box, BoxProps, Center, Flex, Text } from '@chakra-ui/react';
 
 export interface PokerCardProps {
   value: number;
@@ -7,12 +7,28 @@ export interface PokerCardProps {
 
 export default function PokerCard({ value, color }: PokerCardProps) {
   return (
-    <Box h="150px" w="100px" bgColor={color} border="2px solid black">
-      <Center h="full" w="full">
-        <Text fontSize="48px" color="white">
+    <Box
+      h="150px"
+      w="100px"
+      bgColor={color}
+      shadow="md"
+      color="white"
+      px={2}
+      py={1}
+    >
+      <Flex h="full" w="full" flexDir="column">
+        <Text textAlign="left">{value}</Text>
+        <Center flexGrow="1">
+          <Text fontSize="48px">{value}</Text>
+        </Center>
+        <Text
+          textAlign="left"
+          transform="rotate(180deg)"
+          transformOrigin="center center"
+        >
           {value}
         </Text>
-      </Center>
+      </Flex>
     </Box>
   );
 }

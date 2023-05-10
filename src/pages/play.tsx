@@ -4,15 +4,17 @@ import {
   Flex,
   Grid,
   GridItem,
+  Heading,
   Stack,
-  Text,
+  Wrap,
 } from '@chakra-ui/react';
-import PokerCard from '../components/PokerCard';
 import PlayersList from '../components/PlayersList';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import SelectablePokerCard, {
   SelectablePokerCardProps,
 } from '../components/SelectablePokerCard';
+import StoriesList, { StoriesListProps } from '../components/StoriesList';
+import PokerTable, { PokerTableProps } from '../components/PokerTable';
 
 const FIBONACCI = '1, 2, 3, 5, 8, 13, 21, 34, 55, 89'
   .split(', ')
@@ -23,26 +25,41 @@ function getRandom(list: Array<any>) {
 }
 
 interface Props {
-  playerVotes: Array<{ name: string; vote: number }>;
+  isPlaying: PokerTableProps['isPlaying'];
+  playerVotes: PokerTableProps['playerVotes'];
   playersList: Array<string>;
+  storiesList: StoriesListProps['stories'];
+  activeStoryId: StoriesListProps['activeId'];
 }
 
 export default function PlayPage({
   playerVotes = [],
   playersList = [],
+  storiesList = [],
+  activeStoryId = null,
+  isPlaying = false,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const handleSelectCard: SelectablePokerCardProps['onClick'] = (v) => {};
+  const handleGameReset = () => {};
+  const handleGameResume = () => {};
+  const handleGamePause = () => {};
+  const handleStoryAdd = (name: string) => {};
 
   return (
-    <Box w="full" h="100vh" bg="gray.50" px={4} py={6}>
-      <Flex h="full" flexDir="column">
+    <Flex flexDir="column" w="full" h="100vh" bg="gray.50" align="center">
+      <Box w="full" bgColor="purple.500">
+        <Flex py={4} px={6} color="white">
+          <Heading>OpenPlanningPoker</Heading>
+        </Flex>
+      </Box>
+      <Flex flexGrow={1} h="full" flexDir="column" px={4} py={8} maxW="1200px">
         <Box flexGrow="1" w="full">
           <Grid
             h="full"
             w="full"
             gap="4"
-            gridTemplateColumns={'1fr 150px'}
-            gridTemplateRows={'200px 1fr'}
+            gridTemplateColumns={'1fr auto'}
+            gridTemplateRows={'400px 1fr'}
             templateAreas={`
             "table players"
             "table stories"
@@ -56,24 +73,15 @@ export default function PlayPage({
                 h="full"
               >
                 <Center flexGrow={1}>
-                  <Stack
-                    direction="row"
-                    spacing={8}
-                    bg="white"
-                    p={24}
-                    rounded="sm"
-                  >
-                    {playerVotes.map((v) => (
-                      <Box key={v.name}>
-                        <PokerCard value={v.vote} color={'green'} />
-                        <Text w="full" textAlign="center">
-                          {v.name}
-                        </Text>
-                      </Box>
-                    ))}
-                  </Stack>
+                  <PokerTable
+                    playerVotes={playerVotes}
+                    isPlaying={isPlaying}
+                    onReset={handleGameReset}
+                    onPause={handleGamePause}
+                    onResume={handleGameResume}
+                  />
                 </Center>
-                <Stack direction="row" spacing={6} w="full" justify="center">
+                <Wrap direction="row" spacing={6} w="full" justify="center">
                   {FIBONACCI.map((v) => (
                     <SelectablePokerCard
                       key={v}
@@ -82,7 +90,7 @@ export default function PlayPage({
                       onClick={handleSelectCard}
                     />
                   ))}
-                </Stack>
+                </Wrap>
               </Stack>
             </GridItem>
 
@@ -90,11 +98,17 @@ export default function PlayPage({
               <PlayersList players={playersList} />
             </GridItem>
 
-            <GridItem area={'stories'}></GridItem>
+            <GridItem area={'stories'}>
+              <StoriesList
+                activeId={activeStoryId}
+                stories={storiesList}
+                onAddStory={handleStoryAdd}
+              />
+            </GridItem>
           </Grid>
         </Box>
       </Flex>
-    </Box>
+    </Flex>
   );
 }
 
@@ -117,6 +131,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   const props = {
     playerVotes,
     playersList,
+    storiesList: [1, 2, 3, 4, 5].map((v) => ({ name: 'Story ' + v })),
+    activeStoryId: 0,
+    isPlaying: true,
   };
 
   return {

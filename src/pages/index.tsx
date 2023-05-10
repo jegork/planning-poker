@@ -6,12 +6,19 @@ import {
   Flex,
   Heading,
   Input,
-  Stack, Text,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
 
 export default function IndexPage() {
   return (
-    <Box w="full" h="100vh" bgColor="#715DF2" bgImage="/background.svg" backgroundSize="cover">
+    <Box
+      w="full"
+      h="100vh"
+      bgColor="#715DF2"
+      bgImage="/background.svg"
+      backgroundSize="cover"
+    >
       <Center h="full" color="white">
         <Stack dir="column" spacing={6}>
           <Box>
@@ -26,8 +33,7 @@ export default function IndexPage() {
             Create a new game
           </Button>
           <Flex w="full" position="relative" py={2} align="center">
-
-            <Divider borderColor="white" borderWidth="1px"/>
+            <Divider borderColor="white" borderWidth="1px" />
             <Text
               px={2}
               textTransform="uppercase"
