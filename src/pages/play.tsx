@@ -149,6 +149,18 @@ export default function PlayPage({
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context,
 ) => {
+  const params = context.query;
+
+  if (!params?.id || Array.isArray(params.id)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+      props: {},
+    };
+  }
+
   const playersList = [
     'Player 1',
     'Player 2',
@@ -170,7 +182,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     storiesList: [1, 2, 3, 4].map((v) => ({ name: 'Story ' + v })),
     activeStoryId: 0,
     isPlaying: true,
-    code: '12312',
+    code: params.id,
   };
 
   return {
